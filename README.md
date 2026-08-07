@@ -42,3 +42,12 @@ El contenido de calidad ayuda a:
 - Posicionar al guild como referencia en el ecosistema
 
 Educar es una de las formas más poderosas de contribuir.
+# Pilares de contenido
+
+1. Explicaciones simples de qué es Base
+2. Tutoriales de desarrollo
+3. Casos de uso y proyectos destacados
+4. Actualizaciones del ecosistema
+5. Historias de builders del guild
+
+Todo el contenido debe ser claro, útil y orientado a la acción.
