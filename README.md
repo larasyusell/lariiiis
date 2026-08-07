@@ -51,3 +51,22 @@ Educar es una de las formas más poderosas de contribuir.
 5. Historias de builders del guild
 
 Todo el contenido debe ser claro, útil y orientado a la acción.
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract HelloBase {
+    string public greeting = "Hello Base";
+    address public lastSender;
+
+    event GreetingChanged(string newGreeting, address indexed by);
+
+    function setGreeting(string calldata newGreeting) external {
+        greeting = newGreeting;
+        lastSender = msg.sender;
+        emit GreetingChanged(newGreeting, msg.sender);
+    }
+
+    function getGreeting() external view returns (string memory) {
+        return greeting;
+    }
+}
