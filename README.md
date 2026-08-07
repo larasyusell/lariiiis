@@ -24,3 +24,9 @@ Nuestros eventos buscan:
 - Generar colaboraciones entre miembros
 
 Todo con el espíritu open-source y colaborativo de Base.
+
+# Base Guild Content
+
+Repositorio de contenido del Guild de Base.
+
+Aquí coordinamos la creación de material educativo, divulgativo y de marketing sobre el ecosistema Base: hilos, artículos, videos, memes y más.
