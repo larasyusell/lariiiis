@@ -354,3 +354,24 @@ contract MultiCounter {
         emit CounterCIncremented(counterC);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Flag {
+    bool public flag;
+    address public lastToggler;
+
+    event FlagToggled(bool newState, address indexed by);
+
+    function toggle() external {
+        flag = !flag;
+        lastToggler = msg.sender;
+        emit FlagToggled(flag, msg.sender);
+    }
+
+    function setFlag(bool state) external {
+        flag = state;
+        lastToggler = msg.sender;
+        emit FlagToggled(state, msg.sender);
+    }
+}
