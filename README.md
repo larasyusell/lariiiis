@@ -375,3 +375,37 @@ contract Flag {
         emit FlagToggled(state, msg.sender);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleQueue {
+    address[] private queue;
+
+    event Joined(address indexed user, uint256 position);
+    event Left(address indexed user);
+
+    function join() external {
+        queue.push(msg.sender);
+        emit Joined(msg.sender, queue.length - 1);
+    }
+
+    function leave() external {
+        require(queue.length > 0, "Queue is empty");
+        address user = queue[0];
+        // shift left
+        for (uint256 i = 0; i < queue.length - 1; i++) {
+            queue[i] = queue[i + 1];
+        }
+        queue.pop();
+        emit Left(user);
+    }
+
+    function getQueueLength() external view returns (uint256) {
+        return queue.length;
+    }
+
+    function getFirst() external view returns (address) {
+        require(queue.length > 0, "Queue is empty");
+        return queue[0];
+    }
+}
