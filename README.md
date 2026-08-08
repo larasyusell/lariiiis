@@ -408,4 +408,39 @@ contract SimpleQueue {
         require(queue.length > 0, "Queue is empty");
         return queue[0];
     }
+}// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Status {
+    enum State { Inactive, Active, Suspended }
+
+    State public currentState;
+    address public owner;
+
+    event StateChanged(State newState, address indexed by);
+
+    constructor() {
+        owner = msg.sender;
+        currentState = State.Inactive;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    function setActive() external onlyOwner {
+        currentState = State.Active;
+        emit StateChanged(State.Active, msg.sender);
+    }
+
+    function setSuspended() external onlyOwner {
+        currentState = State.Suspended;
+        emit StateChanged(State.Suspended, msg.sender);
+    }
+
+    function setInactive() external onlyOwner {
+        currentState = State.Inactive;
+        emit StateChanged(State.Inactive, msg.sender);
+    }
 }
