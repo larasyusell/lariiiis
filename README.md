@@ -989,3 +989,33 @@ contract AccessToken {
         emit AccessRevoked(user);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Permission {
+    address public admin;
+    mapping(address => mapping(string => bool)) public permissions;
+
+    event PermissionGranted(address indexed user, string permission);
+    event PermissionRevoked(address indexed user, string permission);
+
+    constructor() {
+        admin = msg.sender;
+    }
+
+    function grant(address user, string calldata permission) external {
+        require(msg.sender == admin, "Not admin");
+        permissions[user][permission] = true;
+        emit PermissionGranted(user, permission);
+    }
+
+    function revoke(address user, string calldata permission) external {
+        require(msg.sender == admin, "Not admin");
+        permissions[user][permission] = false;
+        emit PermissionRevoked(user, permission);
+    }
+
+    function hasPermission(address user, string calldata permission) external view returns (bool) {
+        return permissions[user][permission];
+    }
+}
