@@ -1243,3 +1243,31 @@ contract AccessKey {
         emit KeyRevoked(user);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleRoles {
+    address public admin;
+    mapping(address => bool) public isEditor;
+    mapping(address => bool) public isViewer;
+
+    event RoleGranted(address indexed user, string role);
+
+    constructor() {
+        admin = msg.sender;
+        isEditor[msg.sender] = true;
+        isViewer[msg.sender] = true;
+    }
+
+    function grantEditor(address user) external {
+        require(msg.sender == admin, "Not admin");
+        isEditor[user] = true;
+        emit RoleGranted(user, "editor");
+    }
+
+    function grantViewer(address user) external {
+        require(msg.sender == admin || isEditor[msg.sender], "Not authorized");
+        isViewer[user] = true;
+        emit RoleGranted(user, "viewer");
+    }
+}
