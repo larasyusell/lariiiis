@@ -1079,3 +1079,37 @@ contract KeyFlag {
         emit FlagSet(key, flags[key]);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract AdminList {
+    address public superAdmin;
+    mapping(address => bool) public isAdmin;
+
+    event AdminAdded(address indexed admin);
+    event AdminRemoved(address indexed admin);
+
+    constructor() {
+        superAdmin = msg.sender;
+        isAdmin[msg.sender] = true;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == superAdmin, "Not super admin");
+        _;
+    }
+
+    function addAdmin(address admin) external onlySuperAdmin {
+        isAdmin[admin] = true;
+        emit AdminAdded(admin);
+    }
+
+    function removeAdmin(address admin) external onlySuperAdmin {
+        isAdmin[admin] = false;
+        emit AdminRemoved(admin);
+    }
+
+    function checkAdmin(address user) external view returns (bool) {
+        return isAdmin[user];
+    }
+}
