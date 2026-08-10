@@ -1371,3 +1371,34 @@ contract EntryPass {
         emit PassRevoked(user);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Guard {
+    address public owner;
+    mapping(address => bool) public trusted;
+
+    event Trusted(address indexed user);
+    event Untrusted(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        trusted[msg.sender] = true;
+    }
+
+    function trust(address user) external {
+        require(msg.sender == owner, "Not owner");
+        trusted[user] = true;
+        emit Trusted(user);
+    }
+
+    function untrust(address user) external {
+        require(msg.sender == owner, "Not owner");
+        trusted[user] = false;
+        emit Untrusted(user);
+    }
+
+    function isTrusted(address user) external view returns (bool) {
+        return trusted[user];
+    }
+}
