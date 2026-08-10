@@ -1271,3 +1271,42 @@ contract SimpleRoles {
         emit RoleGranted(user, "viewer");
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Gate {
+    address public owner;
+    bool public open;
+    mapping(address => bool) public allowed;
+
+    event GateOpened(address indexed by);
+    event GateClosed(address indexed by);
+    event AccessGranted(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        open = false;
+    }
+
+    function openGate() external {
+        require(msg.sender == owner, "Not owner");
+        open = true;
+        emit GateOpened(msg.sender);
+    }
+
+    function closeGate() external {
+        require(msg.sender == owner, "Not owner");
+        open = false;
+        emit GateClosed(msg.sender);
+    }
+
+    function grantAccess(address user) external {
+        require(msg.sender == owner, "Not owner");
+        allowed[user] = true;
+        emit AccessGranted(user);
+    }
+
+    function canEnter(address user) external view returns (bool) {
+        return open || allowed[user];
+    }
+}
