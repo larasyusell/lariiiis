@@ -1179,3 +1179,36 @@ contract Blacklist {
         return isBlacklisted[user];
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract MemberRegistry {
+    address public owner;
+    mapping(address => bool) public isMember;
+    uint256 public memberCount;
+
+    event MemberAdded(address indexed member);
+    event MemberRemoved(address indexed member);
+
+    constructor() {
+        owner = msg.sender;
+        isMember[msg.sender] = true;
+        memberCount = 1;
+    }
+
+    function addMember(address member) external {
+        require(msg.sender == owner, "Not owner");
+        require(!isMember[member], "Already member");
+        isMember[member] = true;
+        memberCount += 1;
+        emit MemberAdded(member);
+    }
+
+    function removeMember(address member) external {
+        require(msg.sender == owner, "Not owner");
+        require(isMember[member], "Not a member");
+        isMember[member] = false;
+        memberCount -= 1;
+        emit MemberRemoved(member);
+    }
+}
