@@ -1340,3 +1340,34 @@ contract Permit {
         return permitted[user];
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract EntryPass {
+    address public owner;
+    mapping(address => bool) public hasPass;
+    uint256 public totalPasses;
+
+    event PassGranted(address indexed user);
+    event PassRevoked(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        hasPass[msg.sender] = true;
+        totalPasses = 1;
+    }
+
+    function grantPass(address user) external {
+        require(msg.sender == owner, "Not owner");
+        require(!hasPass[user], "Already has pass");
+        hasPass[user] = true;
+        totalPasses += 1;
+        emit PassGranted(user);
+    }
+
+    function revokePass(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasPass[user] = false;
+        emit PassRevoked(user);
+    }
+}
