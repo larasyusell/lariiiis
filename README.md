@@ -1657,3 +1657,34 @@ contract Clearance {
         return hasClearance[user];
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Access {
+    address public owner;
+    mapping(address => bool) public hasAccess;
+
+    event AccessGranted(address indexed user);
+    event AccessRevoked(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        hasAccess[msg.sender] = true;
+    }
+
+    function grant(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasAccess[user] = true;
+        emit AccessGranted(user);
+    }
+
+    function revoke(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasAccess[user] = false;
+        emit AccessRevoked(user);
+    }
+
+    function check(address user) external view returns (bool) {
+        return hasAccess[user];
+    }
+}
