@@ -1564,3 +1564,34 @@ contract Ticket {
         emit TicketRevoked(user);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Badge {
+    address public owner;
+    mapping(address => bool) public hasBadge;
+    uint256 public totalBadges;
+
+    event BadgeGranted(address indexed user);
+    event BadgeRevoked(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        hasBadge[msg.sender] = true;
+        totalBadges = 1;
+    }
+
+    function grantBadge(address user) external {
+        require(msg.sender == owner, "Not owner");
+        require(!hasBadge[user], "Already has badge");
+        hasBadge[user] = true;
+        totalBadges += 1;
+        emit BadgeGranted(user);
+    }
+
+    function revokeBadge(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasBadge[user] = false;
+        emit BadgeRevoked(user);
+    }
+}
