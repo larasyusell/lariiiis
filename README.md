@@ -1402,3 +1402,33 @@ contract Guard {
         return trusted[user];
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Seal {
+    address public owner;
+    mapping(address => bool) public sealed;
+
+    event Sealed(address indexed user);
+    event Unsealed(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function seal(address user) external {
+        require(msg.sender == owner, "Not owner");
+        sealed[user] = true;
+        emit Sealed(user);
+    }
+
+    function unseal(address user) external {
+        require(msg.sender == owner, "Not owner");
+        sealed[user] = false;
+        emit Unsealed(user);
+    }
+
+    function isSealed(address user) external view returns (bool) {
+        return sealed[user];
+    }
+}
