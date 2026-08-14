@@ -2241,3 +2241,34 @@ contract Permit {
         return hasPermit[user];
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract AccessKey {
+    address public owner;
+    mapping(address => bool) public hasKey;
+
+    event KeyGranted(address indexed user);
+    event KeyRevoked(address indexed user);
+
+    constructor() {
+        owner = msg.sender;
+        hasKey[msg.sender] = true;
+    }
+
+    function grantKey(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasKey[user] = true;
+        emit KeyGranted(user);
+    }
+
+    function revokeKey(address user) external {
+        require(msg.sender == owner, "Not owner");
+        hasKey[user] = false;
+        emit KeyRevoked(user);
+    }
+
+    function checkKey(address user) external view returns (bool) {
+        return hasKey[user];
+    }
+}
