@@ -2394,4 +2394,27 @@ contract Key {
     function checkKey(address user) external view returns (bool) {
         return hasKey[user];
     }
+}// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract GuildMembership is ERC721, Ownable {
+    uint256 private _nextTokenId;
+
+    constructor(address initialOwner) 
+        ERC721("Guild Membership", "GMEMBER") 
+        Ownable(initialOwner) 
+    {}
+
+    function mint(address to) external onlyOwner {
+        uint256 tokenId = _nextTokenId++;
+        _safeMint(to, tokenId);
+    }
+
+    function burn(uint256 tokenId) external {
+        require(ownerOf(tokenId) == msg.sender || msg.sender == owner(), "Not authorized");
+        _burn(tokenId);
+    }
 }
